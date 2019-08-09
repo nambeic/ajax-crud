@@ -28,17 +28,29 @@ class LoginController extends Controller
     	];
     	$validator = Validator::make($request->all(), $rules, $messages);
 
-    	if ($validator->fails()) {
-    		return redirect()->back()->withErrors($validator)->withInput();
+    	iif ($validator->fails()) {
+            return response()->json([
+                    'error' => true,
+                    'message' => $validator->errors()
+                ], 200);
+    		// return redirect()->back()->withErrors($validator)->withInput();
     	} else {
     		$email = $request->input('email');
     		$password = $request->input('password');
 
-    		if( Auth::attempt(['email' => $email, 'password' =>$password])) {
-    			return redirect()->intended('/');
+    		if( Auth::attempt(['email' => $email, 'password' =>$password], $request->has('remember'))) {
+                return response()->json([
+                    'error' => false,
+                    'message' => 'success'
+                ], 200);
+    			// return redirect()->intended('/');
     		} else {
     			$errors = new MessageBag(['errorlogin' => 'Email hoặc mật khẩu không đúng']);
-    			return redirect()->back()->withInput()->withErrors($errors);
+                return response()->json([
+                    'error' => true,
+                    'message' => $errors
+                ], 200);
+    			// return redirect()->back()->withInput()->withErrors($errors);
     		}
     	}
     }
