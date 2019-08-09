@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
 use App\Http\Requests;
 use Validator;
 use Auth;
@@ -11,7 +10,6 @@ use Illuminate\Support\MessageBag;
 
 class LoginController extends Controller
 {
-    
     public function getLogin() {
     	return view('login');
     }
@@ -21,14 +19,14 @@ class LoginController extends Controller
     		'password' => 'required|min:8'
     	];
     	$messages = [
-    		'email.required' => 'Email là trường bắt buộc',
+    		'email.required' => 'Email không được để trống.',
     		'email.email' => 'Email không đúng định dạng',
-    		'password.required' => 'Mật khẩu là trường bắt buộc',
+    		'password.required' => 'Mật khẩu không được để trống',
     		'password.min' => 'Mật khẩu phải chứa ít nhất 8 ký tự',
     	];
     	$validator = Validator::make($request->all(), $rules, $messages);
 
-    	iif ($validator->fails()) {
+		if ($validator->fails()) {
             return response()->json([
                     'error' => true,
                     'message' => $validator->errors()
@@ -45,7 +43,7 @@ class LoginController extends Controller
                 ], 200);
     			// return redirect()->intended('/');
     		} else {
-    			$errors = new MessageBag(['errorlogin' => 'Email hoặc mật khẩu không đúng']);
+    			$errors = new MessageBag(['errorlogin' => 'Email hoặc mật khẩu không chính xác']);
                 return response()->json([
                     'error' => true,
                     'message' => $errors

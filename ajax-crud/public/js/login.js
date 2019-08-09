@@ -27,7 +27,7 @@ $(function() {
 								$('.errorLogin').show().text(data.message.errorlogin[0]);
 							}
 						} else {
-							window.location.href = "http://localhost/ajax-crud"
+							window.location.href = "http://google.com"
 						}
 					}
 				});
